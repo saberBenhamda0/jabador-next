@@ -1,9 +1,6 @@
 package com.jabador.property_service.service;
 
-import com.jabador.property_service.entity.Amenitie;
-import com.jabador.property_service.entity.Media;
-import com.jabador.property_service.entity.Property;
-import com.jabador.property_service.entity.UserCache;
+import com.jabador.property_service.entity.*;
 import com.jabador.property_service.repository.AmenitieRepository;
 import com.jabador.property_service.repository.MediaRepository;
 import com.jabador.property_service.repository.PropertyRepository;
@@ -54,9 +51,7 @@ public class PropertyService {
                         .build()
         );
 
-        for(int i = 0; i < amenities.size(); i++){
-            amenitieRepository.save(amenities.get(i));
-        }
+        amenitieRepository.saveAll(amenities);
 
 
         List<Media> medias =  List.of(
@@ -76,10 +71,25 @@ public class PropertyService {
                         .build()
         );
 
-        for(int i = 0; i< medias.size(); i++){
-            mediaRepository.save(medias.get(i));
-        }
+            mediaRepository.saveAll(medias);
 
+        Location location = Location.builder()
+                .continent("africa")
+                .country("morocco")
+                .city("chaouen")
+                .street("lobar")
+                .postalCode(91000)
+                .longitude(5.55)
+                .latitude(10.65)
+                .build();
+
+        Pricing pricing = Pricing.builder()
+                .basePrice(10.00)
+                .serviceFee(50.00)
+                .cleaningFee(14.00)
+                .currency("MAD")
+                .taxes(5.00)
+                .build();
 
         Property property = Property.builder()
                 .title("test")
@@ -93,6 +103,8 @@ public class PropertyService {
                 .maxGuests(0)
                 .amenities(amenities)
                 .media(medias)
+                .location(location)
+                .pricing(pricing)
                 .build();
 
         propertyRepository.save(property);
