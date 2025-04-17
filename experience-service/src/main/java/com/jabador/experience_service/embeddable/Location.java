@@ -1,4 +1,4 @@
-package com.jabador.experience_service.entity;
+package com.jabador.experience_service.embeddable;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class Location {
 
-    private int[] meetingPoint;
+    private CoordinatePoint meetingPoint;
 
-    private int[] experienceLocation;
+    private CoordinatePoint experienceLocation;
 
     private int codePostal;
 

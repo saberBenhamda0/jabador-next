@@ -1,7 +1,6 @@
-package com.jabador.experience_service.entity;
+package com.jabador.experience_service.embeddable;
 
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,8 +20,6 @@ public class Details {
     private String startDate;
 
     private String endDate;
-
-    private int[] timeSlots;
 
     private int minGroupSize;
 
