@@ -23,7 +23,7 @@ public class TimeSlotService {
 
         TimeSlot timeSlot = TimeSlot.builder()
                 .timeslot(5.45)
-                .experienceId(experienceId)
+                .experience(experienceId)
                 .build();
 
         timeSlots.add(timeSlot);

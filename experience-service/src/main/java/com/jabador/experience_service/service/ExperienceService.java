@@ -6,6 +6,7 @@ import com.jabador.experience_service.embeddable.Guest;
 import com.jabador.experience_service.embeddable.Location;
 import com.jabador.experience_service.entity.*;
 import com.jabador.experience_service.repository.ExperienceRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class ExperienceService {
         return experienceRepository.findAll();
     }
 
+    @Transactional
     public void save(){
         CoordinatePoint meetingPoint = CoordinatePoint.builder()
                 .x(0.00)
@@ -76,6 +78,11 @@ public class ExperienceService {
                 .guest(guest)
                 .pricing(100)
                 .build();
+
+        System.out.println("HERE THE DEBUG ");
+        System.out.println(experience);
+        System.out.println(experience.getId());
+
 
         experience.setMainImages(imageService.save(experience));
 

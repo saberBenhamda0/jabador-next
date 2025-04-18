@@ -22,7 +22,7 @@ public class ImageService {
 
         Image image = Image.builder()
                 .url("test url")
-                .experienceId(experienceId)
+                .experience(experienceId)
                 .build();
 
         images.add(image);

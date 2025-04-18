@@ -1,10 +1,8 @@
 package com.jabador.experience_service.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor
@@ -15,11 +13,12 @@ public class TimeSlot {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    private double id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "experienceId")
-    private Experience experienceId;
+    @JsonBackReference
+    private Experience experience;
 
     private double timeslot;
 }

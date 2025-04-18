@@ -22,4 +22,10 @@ public class ExperienceController {
     public List<Experience> getAll(){
         return experienceService.findAll();
     }
+
+    @GetMapping("/add")
+    public String add(){
+        experienceService.save();
+        return "good";
+    }
 }

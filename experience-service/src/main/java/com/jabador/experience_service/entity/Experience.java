@@ -1,13 +1,11 @@
 package com.jabador.experience_service.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jabador.experience_service.embeddable.Details;
 import com.jabador.experience_service.embeddable.Guest;
 import com.jabador.experience_service.embeddable.Location;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -16,21 +14,26 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)  // Added to prevent circular equals/hashCode
 public class Experience {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Changed from AUTO to IDENTITY
+    @EqualsAndHashCode.Include  // Added for proper equals/hashCode
+    private Long id;  // Changed from primitive long to object Long
 
     private String title;
-
     private String description;
 
-    @OneToMany(mappedBy = "experienceId")
+    @OneToMany(mappedBy = "experience", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    @ToString.Exclude  // Added to prevent circular toString()
     private List<Image> mainImages;
 
-    @OneToMany(mappedBy = "experienceId")
-    private List<TimeSlot> timeSlot;
+    @OneToMany(mappedBy = "experience", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    @ToString.Exclude
+    private List<TimeSlot> timeSlot;  // Changed to plural and corrected mapping
 
     @Embedded
     private Guest guest;
@@ -42,8 +45,5 @@ public class Experience {
     private Location location;
 
     private int pricing;
-
-    
-
 
 }
