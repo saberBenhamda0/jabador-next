@@ -68,7 +68,7 @@ public class ApiGatewayConfiguration {
                                                 return chain.filter(exchange.mutate().request(mutatedRequest).build());
                                         })
                                 )
-                                                .uri("lb:user-service")
+                                                .uri("lb://user-service")
 
                 )
                 .build();
