@@ -1,17 +1,21 @@
 package com.jabador.property_service.entity;
 
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Embeddable
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
 public class UserCache {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
 
     private String firstName;
 

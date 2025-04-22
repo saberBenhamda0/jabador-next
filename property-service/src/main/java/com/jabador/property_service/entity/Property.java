@@ -27,7 +27,8 @@ public class Property {
 
     private String description;
 
-    @Embedded
+    @ManyToOne
+    @JoinColumn(name = "owner")
     private UserCache owner;
 
     // features

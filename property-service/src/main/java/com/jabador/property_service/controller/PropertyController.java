@@ -1,15 +1,15 @@
 package com.jabador.property_service.controller;
 
+import com.jabador.property_service.dto.AddPropertyDTO;
 import com.jabador.property_service.entity.Amenitie;
 import com.jabador.property_service.entity.Media;
 import com.jabador.property_service.entity.Property;
 import com.jabador.property_service.entity.UserCache;
 import com.jabador.property_service.service.PropertyService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/property")
@@ -26,9 +26,10 @@ public class PropertyController {
         return propertyService.getAll();
     }
 
-    @GetMapping("/save")
-    public String save(){
-        propertyService.add();
-        return  "everything we correct";
+
+    @PostMapping("/save")
+    public Map<String, String> addProperty(@ModelAttribute AddPropertyDTO addPropertyDTO){
+            return propertyService.add(addPropertyDTO);
+
     }
 }
