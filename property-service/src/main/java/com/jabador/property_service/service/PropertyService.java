@@ -1,16 +1,13 @@
 package com.jabador.property_service.service;
 
-import com.jabador.property_service.dto.AddPropertyDTO;
-import com.jabador.property_service.dto.LocationDTO;
-import com.jabador.property_service.dto.MediaDTO;
-import com.jabador.property_service.dto.PricingDTO;
+import com.jabador.property_service.dto.*;
 import com.jabador.property_service.entity.*;
+import com.jabador.property_service.exception.PropertyDoesExistNotException;
 import com.jabador.property_service.repository.AmenitieRepository;
 import com.jabador.property_service.repository.MediaRepository;
 import com.jabador.property_service.repository.PropertyRepository;
 import com.jabador.property_service.repository.UserCacheRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -36,8 +33,25 @@ public class PropertyService {
         this.userCacheRepository = userCacheRepository;
     }
 
-    public List<Property> getAll(){
-        return propertyRepository.getAllBy();
+    public List<ListAllPropertyDTO> getAll(){
+        List<Property> properties = propertyRepository.findAll();
+
+        List<ListAllPropertyDTO> propertiesDTOS = new ArrayList<>();
+        for(Property property : properties){
+            Location location = property.getLocation();
+            LocationDTO locationDTO = new LocationDTO(location.getCountry(), location.getCity(), location.getStreet(), location.getPostalCode(), location.getLatitude(), location.getLongitude());
+            ListAllPropertyDTO propertyDTO = ListAllPropertyDTO.builder()
+                    .id(property.getId())
+                    .name(property.getTitle())
+                    .type(property.getType())
+                    .price(property.getPricing().getBasePrice())
+                    .location(locationDTO)
+                    .images(property.getMedia())
+                    .build();
+
+            propertiesDTOS.add(propertyDTO);
+        }
+        return propertiesDTOS;
     }
 
     public Map<String, String> add(AddPropertyDTO addPropertyDTO){
@@ -54,35 +68,32 @@ public class PropertyService {
 
         for(MediaDTO mediaDTO : mediaDTOS){
 
+            Path path = saveImage(mediaDTO.image(), mediaDTO.caption());
+
             Media media = Media.builder()
                     .isPrimary(mediaDTO.isPrimary())
-                    .imagesOrder(mediaDTO.imagesOrder())
+                    .imagesOrder(mediaDTO.order())
+                    .url(path.toString())
+                    .caption(mediaDTO.caption())
+                    .type(mediaDTO.type())
                     .build();
 
-            Path path = saveImage(mediaDTO.image(), addPropertyDTO.propertyName());
-            media.setUrl(path.toString());
-            media.setType(path.toString());
-            media.setCaption(path.toString());
+            medias.add(media);
         }
 
-        LocationDTO locationDTO = addPropertyDTO.locationDTO();
         Location location = Location.builder()
-                .continent(locationDTO.continent())
-                .country(locationDTO.country())
-                .city(locationDTO.city())
-                .street(locationDTO.street())
-                .postalCode(locationDTO.postalCode())
-                .longitude(locationDTO.longitude())
-                .latitude(locationDTO.latitude())
+                .country(addPropertyDTO.country())
+                .city(addPropertyDTO.city())
+                .street(addPropertyDTO.street())
+                .postalCode(addPropertyDTO.postalCode())
+                .longitude(addPropertyDTO.longitude())
+                .latitude(addPropertyDTO.latitude())
                 .build();
 
-        PricingDTO pricingDTO = addPropertyDTO.pricingDTO();
         Pricing pricing = Pricing.builder()
-                .basePrice(pricingDTO.basePrice())
-                .serviceFee(pricingDTO.serviceFee())
-                .cleaningFee(pricingDTO.cleaningFee())
-                .currency(pricingDTO.currency())
-                .taxes(pricingDTO.taxes())
+                .basePrice(addPropertyDTO.price())
+                .currency("MAD")
+                .taxes(20.00)
                 .build();
 
         Optional<UserCache>  userCache = userCacheRepository.findById(addPropertyDTO.owner());
@@ -103,12 +114,18 @@ public class PropertyService {
                 .pricing(pricing)
                 .build();
 
-        propertyRepository.save(property);
         mediaRepository.saveAll(medias);
+        propertyRepository.save(property);
 
         Map<String, String> response = new HashMap<>();
         response.put("response", "the property has been added with success");
         return response;
+    }
+
+    public Property get(long id){
+        Optional<Property> optionalProperty = propertyRepository.findById(id);
+        Property property = optionalProperty.orElseThrow(() -> new PropertyDoesExistNotException(id));
+        return property;
     }
 
     public Path saveImage(MultipartFile image,String propertyName){
@@ -117,7 +134,7 @@ public class PropertyService {
             Files.createDirectories(Paths.get(UPLOAD_DIR_FOR_PROPERTY));
 
             String imageType = image.getContentType().split("/")[1];
-            String imageFullName = propertyName + "." + imageType;
+            String imageFullName = propertyName + UUID.randomUUID() + "." + imageType;
 
             Path path = Paths.get(UPLOAD_DIR_FOR_PROPERTY, imageFullName);
 
@@ -130,4 +147,6 @@ public class PropertyService {
         }
 
     }
+
+
 }

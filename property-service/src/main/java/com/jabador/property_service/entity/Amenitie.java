@@ -22,7 +22,7 @@ public class Amenitie {
 
     private String name;
 
-    private String type;
+    private String type; // speciel essensial safety location.
 
     private String icon;
 }

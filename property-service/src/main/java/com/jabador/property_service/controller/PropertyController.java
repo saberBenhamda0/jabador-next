@@ -1,6 +1,7 @@
 package com.jabador.property_service.controller;
 
 import com.jabador.property_service.dto.AddPropertyDTO;
+import com.jabador.property_service.dto.ListAllPropertyDTO;
 import com.jabador.property_service.entity.Amenitie;
 import com.jabador.property_service.entity.Media;
 import com.jabador.property_service.entity.Property;
@@ -22,14 +23,18 @@ public class PropertyController {
     }
 
     @GetMapping("/all")
-    public List<Property> getAll(){
+    public List<ListAllPropertyDTO> getAll(){
         return propertyService.getAll();
     }
 
 
-    @PostMapping("/save")
+    @PostMapping(value = "/save", consumes = {"multipart/form-data"})
     public Map<String, String> addProperty(@ModelAttribute AddPropertyDTO addPropertyDTO){
             return propertyService.add(addPropertyDTO);
+    }
 
+    @GetMapping("/{id}")
+    public Property getProperty(@RequestParam long id){
+        return propertyService.get(id);
     }
 }

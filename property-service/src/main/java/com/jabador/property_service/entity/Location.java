@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Location {
 
-    private String continent;
-
     private String country;
 
     private String city;
