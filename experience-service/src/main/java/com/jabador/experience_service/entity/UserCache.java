@@ -1,4 +1,4 @@
-package com.jabador.property_service.entity;
+package com.jabador.experience_service.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

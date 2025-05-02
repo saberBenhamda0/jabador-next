@@ -1,27 +1,26 @@
 package com.jabador.experience_service.service;
 
-import com.jabador.experience_service.embeddable.CoordinatePoint;
-import com.jabador.experience_service.embeddable.Details;
-import com.jabador.experience_service.embeddable.Guest;
-import com.jabador.experience_service.embeddable.Location;
+import com.jabador.experience_service.embeddable.*;
 import com.jabador.experience_service.entity.*;
+import com.jabador.experience_service.exception.RessourceNotFoundException;
 import com.jabador.experience_service.repository.ExperienceRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ExperienceService {
 
     private final ExperienceRepository experienceRepository;
-    private final ImageService imageService;
+    private final MediaService mediaService;
     private final TimeSlotService timeSlotService;
 
 
-    public ExperienceService(ExperienceRepository experienceRepository, ImageService imageService, TimeSlotService timeSlotService) {
+    public ExperienceService(ExperienceRepository experienceRepository, MediaService mediaService, TimeSlotService timeSlotService) {
         this.experienceRepository = experienceRepository;
-        this.imageService = imageService;
+        this.mediaService = mediaService;
         this.timeSlotService = timeSlotService;
     }
 
@@ -42,10 +41,10 @@ public class ExperienceService {
                 .build();
 
         Location location = Location.builder()
-                .codePostal(91000)
+                .postalCode(91000)
                 .experienceLocation(experiencePoint)
                 .meetingPoint(meetingPoint)
-                .continent("test continent")
+                .state("test state")
                 .country("test country")
                 .city("city test")
                 .street("street test")
@@ -57,18 +56,36 @@ public class ExperienceService {
                 .infants(0)
                 .build();
 
-        Details details = Details.builder()
-                .prepTime(0)
-                .duration(10)
-                .startDate("2020/12/12")
-                .endDate("2020/12/18")
-                .minGroupSize(1)
-                .maxGroupSize(2)
-                .privateGroup(false)
-                .primaryLanguague("English")
-                .isWheelchairAccesible(true)
+        Duration duration = Duration.builder()
+                .time(20)
+                .flexible(true)
                 .build();
 
+        GroupSize groupSize = GroupSize.builder()
+                .max(10)
+                .min(2)
+                .privateGroup(false)
+                .privateGroupMaxSize(5)
+                .privateGroupMinSize(2)
+                .build();
+
+        Details details = Details.builder()
+                .prepTime(0)
+                .duration(duration)
+                .startDate("2020/12/12")
+                .endDate("2020/12/18")
+                .groupSize(groupSize)
+                .primaryLanguague("English")
+                .isWheelchairAccesible(true)
+                .skillLevel("Beginner")
+                .build();
+
+
+        Pricing price = Pricing.builder()
+                .basePrice(100)
+                .currency("MAD")
+                .privateGroupRate(200)
+                .build();
 
         Experience experience = Experience.builder()
                 .title("title test")
@@ -76,7 +93,7 @@ public class ExperienceService {
                 .details(details)
                 .location(location)
                 .guest(guest)
-                .pricing(100)
+                .pricing(price)
                 .build();
 
         System.out.println("HERE THE DEBUG ");
@@ -84,11 +101,17 @@ public class ExperienceService {
         System.out.println(experience.getId());
 
 
-        experience.setMainImages(imageService.save(experience));
+        experience.setMedia(mediaService.save(experience));
 
         experience.setTimeSlot(timeSlotService.save(experience));
 
         experienceRepository.save(experience);
 
+    }
+
+    public Experience getPerId(long id){
+        Optional<Experience> optionalExperience = experienceRepository.findById(id);
+        Experience experience = optionalExperience.orElseThrow(() -> new RessourceNotFoundException(id));
+        return experience;
     }
 }

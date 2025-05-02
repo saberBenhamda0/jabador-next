@@ -7,6 +7,8 @@ import com.jabador.property_service.repository.AmenitieRepository;
 import com.jabador.property_service.repository.MediaRepository;
 import com.jabador.property_service.repository.PropertyRepository;
 import com.jabador.property_service.repository.UserCacheRepository;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -68,12 +70,12 @@ public class PropertyService {
 
         for(MediaDTO mediaDTO : mediaDTOS){
 
-            Path path = saveImage(mediaDTO.image(), mediaDTO.caption());
+            String path = saveImage(mediaDTO.image(), mediaDTO.caption());
 
             Media media = Media.builder()
                     .isPrimary(mediaDTO.isPrimary())
                     .imagesOrder(mediaDTO.order())
-                    .url(path.toString())
+                    .url(path)
                     .caption(mediaDTO.caption())
                     .type(mediaDTO.type())
                     .build();
@@ -128,7 +130,7 @@ public class PropertyService {
         return property;
     }
 
-    public Path saveImage(MultipartFile image,String propertyName){
+    public String saveImage(MultipartFile image,String propertyName){
 
         try {
             Files.createDirectories(Paths.get(UPLOAD_DIR_FOR_PROPERTY));
@@ -140,7 +142,15 @@ public class PropertyService {
 
             Files.write(path, image.getBytes());
 
-            return path;
+            // Return a normalized URL path (e.g., "uploads/property/image.jpg")
+            Path baseDir = Paths.get("uploads", "property"); // Adjust based on your config
+            Path relativePath = baseDir.resolve(imageFullName);
+
+            System.out.println(relativePath);
+
+            System.out.println(Paths.get(relativePath.toString().replace("\\", "/")).toString());
+
+            return relativePath.toString().replace("\\", "/"); // Return POSIX-style path
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -149,4 +159,23 @@ public class PropertyService {
     }
 
 
+    public ResponseEntity<byte[]> readImage(String path) throws IOException {
+        Path ImagePath = Paths.get(path);
+        if(!Files.exists(ImagePath)){
+            return ResponseEntity.notFound().build();
+        }
+        byte[] image = Files.readAllBytes(ImagePath);
+        String imageName = ImagePath.getFileName().toString();
+        MediaType contentType = null;
+        
+        if(imageName.endsWith(".jpeg"))
+            contentType = MediaType.IMAGE_JPEG;
+        else if (imageName.endsWith(".png")){
+            contentType = MediaType.IMAGE_PNG;
+        }
+        
+        return ResponseEntity.ok()
+                .contentType(contentType)
+                .body(image);
+    }
 }

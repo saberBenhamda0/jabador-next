@@ -41,7 +41,10 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.OPTIONS).permitAll() // Allow preflight requests
                         .pathMatchers(
                                 "/api/auth/**",
+                                "/api/property/**",
+                                "/api/experience/**",
                                 "/actuator/**",
+                                "/uploads/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",

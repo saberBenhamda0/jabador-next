@@ -11,21 +11,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class UserCache {
+public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private long id;
 
-    private String firstName;
+    private String status;
 
-    private String secondName;
+    private String bookingType;
 
-    private String email;
+    @Embedded
+    private Dates dates;
 
-    private String gender;
+    @Embedded
+    private Pricing price;
 
-    private String profilePicutreUrl;
-
-
+    @ManyToOne
+    @JoinColumn(name = "property_id")
+    private Property property;
 }

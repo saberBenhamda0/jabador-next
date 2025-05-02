@@ -37,27 +37,36 @@ public class ApiGatewayConfiguration {
 
         Function<PredicateSpec, Buildable<Route>> experienceRoute = p -> p
                 .path("/api/experience/**")
-                .filters(f -> { f
+                /*.filters(f -> { f
                         .filter(jwtFilterUtils.validateJwtFilterAndAddUserIDToRequest());
                     return f;
-                })
+                })*/
                 .uri("lb://experience-service");
 
         Function<PredicateSpec, Buildable<Route>> propertyRoute = p -> p
                 .path("/api/property/**")
+                /*
                 .filters(f -> { f
                         .filter(jwtFilterUtils.validateJwtFilterAndAddUserIDToRequest());
                     return f;
-                })
+                })*/
                 .uri("lb://property-service");
 
         Function<PredicateSpec, Buildable<Route>> userRoute = p -> p
                 .path("/api/user/**")
-                .filters(f -> { f
+                /*.filters(f -> { f
                         .filter(jwtFilterUtils.validateJwtFilterAndAddUserIDToRequest());
                     return f;
-                })
+                })*/
                 .uri("lb://user-service");
+
+        Function<PredicateSpec, Buildable<Route>> uploadsproperty = p -> p
+                .path("/uploads/property/**")
+                /*.filters(f -> { f
+                        .filter(jwtFilterUtils.validateJwtFilterAndAddUserIDToRequest());
+                    return f;
+                })*/
+                .uri("lb://property-service");
 
         Function<PredicateSpec, Buildable<Route>> authRoute = p -> p
                 .path("/api/auth/**")
@@ -69,6 +78,7 @@ public class ApiGatewayConfiguration {
                 .route(experienceRoute)
                 .route(userRoute)
                 .route(authRoute)
+                .route(uploadsproperty)
                 .route(propertyRoute)
                 .build();
     }

@@ -22,7 +22,16 @@ public class TimeSlotService {
         List<TimeSlot> timeSlots = new ArrayList<>();
 
         TimeSlot timeSlot = TimeSlot.builder()
-                .timeslot(5.45)
+                .endTime("17:05")
+                .startTime("17:00")
+                .availableSpots(10)
+                .date("12/12/2004")
+                .currency("MAD")
+                .discountedPrice(100)
+                .dayOfWeek("MONDAY")
+                .formatedDate("12 12 2004")
+                .isSpecialOffer(false)
+                .originalPrice(120)
                 .experience(experienceId)
                 .build();
 

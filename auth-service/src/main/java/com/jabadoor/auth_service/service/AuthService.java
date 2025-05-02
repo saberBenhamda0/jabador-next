@@ -39,8 +39,11 @@ public class AuthService {
         Map<String, String> claims = new HashMap<>();
 
         claims.put("role", user.getRole());
+        claims.put("id", user.getId().toString());
         claims.put("first_name", user.getFirstName());
         claims.put("second_name", user.getSecondName());
+        claims.put("email", user.getEmail());
+        claims.put("phone_number", user.getPhoneNumber());
 
         response.put("access", jwtService.generateAccessToken(claims, user.getEmail()));
         response.put("refresh", jwtService.generateRefreshToken(claims, user.getEmail()));
@@ -55,7 +58,7 @@ public class AuthService {
                 .secondName(signUpDTO.secondName())
                 .email(signUpDTO.email())
                 .phoneNumber(signUpDTO.phoneNumber())
-                .password(signUpDTO.password())
+                .password(passwordEncoder.encode(signUpDTO.password()))
                 .build();
 
 
@@ -69,8 +72,11 @@ public class AuthService {
         Map<String, String> claims = new HashMap<>();
 
         claims.put("role", user.getRole());
+        claims.put("id", user.getId().toString());
         claims.put("first_name", user.getFirstName());
         claims.put("second_name", user.getSecondName());
+        claims.put("email", user.getEmail());
+        claims.put("phone_number", user.getPhoneNumber());
 
         response.put("access", jwtService.generateAccessToken(claims, user.getEmail()));
         response.put("refresh", jwtService.generateRefreshToken(claims, user.getEmail()));

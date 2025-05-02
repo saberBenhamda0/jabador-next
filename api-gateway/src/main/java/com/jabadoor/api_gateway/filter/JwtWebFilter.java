@@ -18,6 +18,9 @@ public class JwtWebFilter implements WebFilter {
     private final JwtService jwtService;
     private static final List<String> PUBLIC_PATHS = List.of(
             "/api/auth/",
+            "/api/property/",
+            "/api/experience/",
+            "/uploads/",
             "/public/",
             "/actuator/",
             "/v3/api-docs",

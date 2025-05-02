@@ -15,19 +15,17 @@ public class Details {
 
     private int prepTime;
 
-    private int duration;
+    private Duration duration; // yes
 
     private String startDate;
 
     private String endDate;
 
-    private int minGroupSize;
+    private GroupSize groupSize;
 
-    private int maxGroupSize;
+    private String primaryLanguague; // yes
 
-    private boolean privateGroup;
+    private boolean isWheelchairAccesible; // yes
 
-    private String primaryLanguague;
-
-    private boolean isWheelchairAccesible;
+    private String skillLevel; // yes
 }

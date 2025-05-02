@@ -26,7 +26,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public Map<String, String> login(@RequestBody LoginDTO loginDTO){
-    return authService.login(loginDTO.email(), loginDTO.password());
+    return authService.login(loginDTO.username(), loginDTO.password());
     }
 
     @PostMapping("/signup")

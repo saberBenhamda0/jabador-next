@@ -1,6 +1,6 @@
-package com.jabador.property_service.entity;
+package com.jabador.experience_service.embeddable;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,8 +15,8 @@ public class Pricing {
 
     private double basePrice;
 
-    private double taxes;
-
     private String currency;
+
+    private int privateGroupRate;
 
 }

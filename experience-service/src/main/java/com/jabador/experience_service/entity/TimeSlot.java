@@ -15,10 +15,29 @@ public class TimeSlot {
     @Id
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "experienceId")
-    @JsonBackReference
-    private Experience experience;
+    private String date;
 
-    private double timeslot;
+    private String dayOfWeek;
+
+    private String formatedDate;
+
+    private String startTime;
+
+    private String endTime;
+
+    private int originalPrice;
+
+    private int discountedPrice;
+
+    private String currency;
+
+    private int availableSpots;
+
+    private boolean isSpecialOffer;
+
+
+    @ManyToOne
+    @JoinColumn(name = "experience_id")
+    @JsonBackReference // Add this
+    private Experience experience;
 }

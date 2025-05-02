@@ -34,7 +34,8 @@ public class PropertyController {
     }
 
     @GetMapping("/{id}")
-    public Property getProperty(@RequestParam long id){
+    public Property getProperty(@PathVariable long id){
         return propertyService.get(id);
     }
+
 }

@@ -1,9 +1,7 @@
 package com.jabador.experience_service.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.jabador.experience_service.embeddable.Details;
-import com.jabador.experience_service.embeddable.Guest;
-import com.jabador.experience_service.embeddable.Location;
+import com.jabador.experience_service.embeddable.*;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,14 +23,13 @@ public class Experience {
     private String title;
     private String description;
 
-    @OneToMany(mappedBy = "experience", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    @ToString.Exclude  // Added to prevent circular toString()
-    private List<Image> mainImages;
+    @Embedded
+    private Categorie categorie;
 
-    @OneToMany(mappedBy = "experience", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    @ToString.Exclude
+    @OneToMany()
+    private List<Media> media;
+
+    @OneToMany()
     private List<TimeSlot> timeSlot;  // Changed to plural and corrected mapping
 
     @Embedded
@@ -44,6 +41,7 @@ public class Experience {
     @Embedded
     private Location location;
 
-    private int pricing;
+    @Embedded
+    private Pricing pricing;
 
 }

@@ -27,13 +27,15 @@ public class Location {
     })
     private CoordinatePoint experienceLocation;
 
-    private int codePostal;
+    private int postalCode;
 
-    private String continent;
+    private String state;
 
     private String country;
 
     private String city;
 
     private String street;
+
+    private String instructions;
 }
